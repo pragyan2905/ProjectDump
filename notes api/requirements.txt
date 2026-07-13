@@ -1,0 +1,7 @@
+fastapi[all]
+sqlalchemy
+jinja2
+passlib[bcrypt]
+bcrypt
+PyJWT
+python-multipart
