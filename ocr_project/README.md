@@ -1,39 +1,47 @@
 # OCR Webapp
 
-This project is a modular, full-stack Optical Character Recognition (OCR) application built with FastAPI and Streamlit. It extracts text from uploaded images using a cloud OCR engine.
+A simple Optical Character Recognition (OCR) application built with FastAPI and Streamlit. It extracts text from uploaded images using the OCR.Space API.
 
-Streamlit App Link: [Insert Link Here]
+App Link: https://opticalcharacterrecognition.streamlit.app
 
 ## Architecture
 
-* Backend: FastAPI (Python)
-* Frontend: Streamlit (Python)
+* Backend: FastAPI
+* Frontend: Streamlit
 * OCR Engine: OCR.Space API
 
 ## Project Structure
 
-* backend/main.py: Entry point for the FastAPI server.
-* backend/api/routes.py: API endpoints for handling image uploads.
-* backend/services/ocr_engine.py: Logic for communicating with the external OCR API.
-* backend/core/config.py: Environment variable configuration and security.
-* frontend/app.py: Streamlit user interface.
+* `backend/main.py`: FastAPI server entry point.
+* `backend/api/routes.py`: API endpoint for image uploads.
+* `backend/services/ocr_engine.py`: OCR.Space API integration.
+* `backend/core/config.py`: Configuration loading.
+* `frontend/app.py`: Streamlit UI.
 
 ## Local Setup
 
-1. Create a virtual environment and activate it:
+1. Create and activate a virtual environment:
+   ```bash
    python3 -m venv venv
    source venv/bin/activate
-
+   ```
 2. Install dependencies:
+   ```bash
    pip install -r requirements.txt
-
-3. Add your OCR.Space API key to a .env file at the root:
+   ```
+3. Add your OCR.Space API key to a `.env` file at the root:
+   ```text
    OCR_API_KEY=your_key_here
+   ```
 
-## Running the Application
+## Running Locally
 
-Start the backend server (Terminal 1):
+Start the backend server:
+```bash
 uvicorn backend.main:app --reload
+```
 
-Start the frontend UI (Terminal 2):
+Start the frontend UI:
+```bash
 streamlit run frontend/app.py
+```
