@@ -5,9 +5,54 @@ import pandas as pd
 # The URL where our FastAPI backend is running
 BACKEND_URL = "http://localhost:8000"
 
-st.set_page_config(page_title="AI Email Agent", page_icon="📧", layout="wide")
+st.set_page_config(page_title="AI Email Agent", layout="wide")
 
-st.title("📧 AI Bulk Email Agent")
+
+st.markdown('''
+<style>
+    /* Default Dark Theme */
+    .stApp {
+        background-color: #000000;
+        color: #ffffff;
+    }
+    
+    /* Inputs */
+    .stTextInput input, .stTextArea textarea {
+        background-color: #111111 !important;
+        color: #ffffff !important;
+        border: 1px solid #333333 !important;
+        border-radius: 8px !important;
+    }
+    
+    /* Sidebar */
+    [data-testid="stSidebar"] {
+        background-color: #0a0a0a !important;
+        border-right: 1px solid #222222 !important;
+    }
+    
+    /* Buttons */
+    .stButton > button {
+        background-color: #1a1a1a !important;
+        color: white !important;
+        border: 1px solid #333333 !important;
+        border-radius: 8px !important;
+        transition: 0.3s;
+    }
+    
+    .stButton > button:hover {
+        border: 1px solid #ffffff !important;
+        background-color: #333333 !important;
+    }
+    
+    /* Text */
+    h1, h2, h3, h4, h5, h6, p, label {
+        color: #f0f0f0 !important;
+    }
+</style>
+''', unsafe_allow_html=True)
+
+
+st.title("AI Bulk Email Agent")
 st.markdown("Upload your recipient data (CSV or Excel) and provide a custom prompt to generate personalized emails.")
 
 
@@ -15,7 +60,7 @@ st.markdown("Upload your recipient data (CSV or Excel) and provide a custom prom
 st.divider()
 
 # Sidebar for Configuration
-st.sidebar.header("⚙️ App Settings")
+st.sidebar.header("App Settings")
 st.sidebar.markdown("Configure your keys to use the app.")
 groq_key = st.sidebar.text_input("Groq API Key", type="password")
 smtp_email = st.sidebar.text_input("SMTP Email (e.g., Gmail)", placeholder="your.email@gmail.com")
@@ -78,7 +123,7 @@ if "recipient_data" in st.session_state and len(st.session_state["recipient_data
             height=100
         )
         
-    if st.button("🚀 Launch Campaign", type="primary"):
+    if st.button("Launch Campaign", type="primary"):
         if not campaign_name or not prompt_template:
             st.warning("Please provide both a Campaign Name and an AI Prompt.")
         elif not groq_key:
@@ -97,7 +142,7 @@ if "recipient_data" in st.session_state and len(st.session_state["recipient_data
                     if response.status_code == 200:
                         data = response.json()
                         st.session_state["campaign_id"] = data['id']
-                        st.success(f"🎉 Success! Campaign '{data['name']}' created with ID: {data['id']}.")
+                        st.success(f"Success! Campaign '{data['name']}' created with ID: {data['id']}.")
                         st.info(f"{data['total_recipients']} recipient records have been saved to the database as 'Pending'.")
                     else:
                         st.error(f"API Error ({response.status_code}): {response.text}")
@@ -113,7 +158,7 @@ if "campaign_id" in st.session_state:
     with col1:
         st.write("Click refresh to fetch the latest AI-generated drafts from the database.")
     with col2:
-        if st.button("🔄 Refresh Drafts"):
+        if st.button("Refresh Drafts"):
             # Trigger a rerun to fetch
             pass
             
@@ -129,11 +174,11 @@ if "campaign_id" in st.session_state:
                 for idx, email in enumerate(emails):
                     # Use status for an indicator icon
                     if email["status"] == "sent":
-                        icon = "🚀"
+                        icon = "Sent:"
                     elif email["status"] == "approved":
-                        icon = "✅"
+                        icon = "Approved:"
                     else:
-                        icon = "✍️"
+                        icon = "Draft:"
                     
                     with st.expander(f"{icon} Email to: {email['recipient_name']} ({email['recipient_email']})"):
                         # We use session state to track edits per text area to avoid them overwriting on rerun
@@ -154,13 +199,13 @@ if "campaign_id" in st.session_state:
                         
                         # Only show action buttons if the draft is actually generated
                         if email["status"] == "sent":
-                            st.success("✅ This email has been sent!")
+                            st.success("This email has been sent!")
                             
                         elif email["status"] == "approved":
-                            st.info("✅ Status: Approved — ready to send!")
+                            st.info("Status: Approved — ready to send!")
                             col_a, col_b = st.columns([1, 1])
                             with col_a:
-                                if st.button("📤 Send Email Now", key=f"btn_send_{email['id']}", type="primary"):
+                                if st.button("Send Email Now", key=f"btn_send_{email['id']}", type="primary"):
                                     if not smtp_email or not smtp_password:
                                         st.error("Please enter your SMTP credentials in the sidebar.")
                                     else:
@@ -177,7 +222,7 @@ if "campaign_id" in st.session_state:
                                             else:
                                                 st.error(f"Failed to send: {send_res.text}")
                             with col_b:
-                                if st.button("✏️ Edit & Re-save", key=f"btn_save_{email['id']}"):
+                                if st.button("Edit & Re-save", key=f"btn_save_{email['id']}"):
                                     update_payload = {
                                         "generated_content": edited_content,
                                         "status": "approved"
@@ -195,7 +240,7 @@ if "campaign_id" in st.session_state:
                         elif email["status"] != "pending":
                             # Generated but not yet approved
                             st.warning("Draft generated — review and approve below.")
-                            if st.button("✅ Approve & Save", key=f"btn_save_{email['id']}", type="primary"):
+                            if st.button("Approve & Save", key=f"btn_save_{email['id']}", type="primary"):
                                 update_payload = {
                                     "generated_content": edited_content,
                                     "status": "approved"
