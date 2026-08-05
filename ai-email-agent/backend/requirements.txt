@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+pandas
+openpyxl
+langchain
+langchain-core
+langgraph
+celery
+redis
+sqlalchemy
+psycopg2-binary
+pydantic
+langchain-groq
+email-validator
