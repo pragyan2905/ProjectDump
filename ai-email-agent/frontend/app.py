@@ -7,51 +7,6 @@ BACKEND_URL = "http://localhost:8000"
 
 st.set_page_config(page_title="AI Email Agent", layout="wide")
 
-
-st.markdown('''
-<style>
-    /* Default Dark Theme */
-    .stApp {
-        background-color: #000000;
-        color: #ffffff;
-    }
-    
-    /* Inputs */
-    .stTextInput input, .stTextArea textarea {
-        background-color: #111111 !important;
-        color: #ffffff !important;
-        border: 1px solid #333333 !important;
-        border-radius: 8px !important;
-    }
-    
-    /* Sidebar */
-    [data-testid="stSidebar"] {
-        background-color: #0a0a0a !important;
-        border-right: 1px solid #222222 !important;
-    }
-    
-    /* Buttons */
-    .stButton > button {
-        background-color: #1a1a1a !important;
-        color: white !important;
-        border: 1px solid #333333 !important;
-        border-radius: 8px !important;
-        transition: 0.3s;
-    }
-    
-    .stButton > button:hover {
-        border: 1px solid #ffffff !important;
-        background-color: #333333 !important;
-    }
-    
-    /* Text */
-    h1, h2, h3, h4, h5, h6, p, label {
-        color: #f0f0f0 !important;
-    }
-</style>
-''', unsafe_allow_html=True)
-
-
 st.title("AI Bulk Email Agent")
 st.markdown("Upload your recipient data (CSV or Excel) and provide a custom prompt to generate personalized emails.")
 
