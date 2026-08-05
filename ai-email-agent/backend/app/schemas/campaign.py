@@ -11,6 +11,11 @@ class CampaignCreate(BaseModel):
     name: str
     prompt_template: str
     recipients: List[dict] # Accepting a list of dicts from the parsed CSV
+    groq_api_key: str
+
+class EmailSendRequest(BaseModel):
+    smtp_email: str
+    smtp_password: str
 
 class CampaignResponse(BaseModel):
     id: int

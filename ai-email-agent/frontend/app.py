@@ -14,6 +14,13 @@ st.markdown("Upload your recipient data (CSV or Excel) and provide a custom prom
 
 st.divider()
 
+# Sidebar for Configuration
+st.sidebar.header("⚙️ App Settings")
+st.sidebar.markdown("Configure your keys to use the app.")
+groq_key = st.sidebar.text_input("Groq API Key", type="password")
+smtp_email = st.sidebar.text_input("SMTP Email (e.g., Gmail)", placeholder="your.email@gmail.com")
+smtp_password = st.sidebar.text_input("SMTP App Password", type="password")
+
 # Section 1: File Upload & Data Inspection
 st.header("Step 1: Upload Recipient Data")
 
@@ -74,12 +81,15 @@ if "recipient_data" in st.session_state and len(st.session_state["recipient_data
     if st.button("🚀 Launch Campaign", type="primary"):
         if not campaign_name or not prompt_template:
             st.warning("Please provide both a Campaign Name and an AI Prompt.")
+        elif not groq_key:
+            st.warning("Please enter your Groq API Key in the sidebar.")
         else:
             with st.spinner("Saving campaign to database..."):
                 payload = {
                     "name": campaign_name,
                     "prompt_template": prompt_template,
-                    "recipients": st.session_state["recipient_data"]
+                    "recipients": st.session_state["recipient_data"],
+                    "groq_api_key": groq_key
                 }
                 
                 try:
@@ -151,9 +161,16 @@ if "campaign_id" in st.session_state:
                             col_a, col_b = st.columns([1, 1])
                             with col_a:
                                 if st.button("📤 Send Email Now", key=f"btn_send_{email['id']}", type="primary"):
-                                    with st.spinner("Sending..."):
-                                        send_res = requests.post(f"{BACKEND_URL}/api/campaign/emails/{email['id']}/send")
-                                        if send_res.status_code == 200:
+                                    if not smtp_email or not smtp_password:
+                                        st.error("Please enter your SMTP credentials in the sidebar.")
+                                    else:
+                                        with st.spinner("Sending..."):
+                                            send_payload = {
+                                                "smtp_email": smtp_email,
+                                                "smtp_password": smtp_password
+                                            }
+                                            send_res = requests.post(f"{BACKEND_URL}/api/campaign/emails/{email['id']}/send", json=send_payload)
+                                            if send_res.status_code == 200:
                                             st.balloons()
                                             st.success("Email sent successfully!")
                                             st.rerun()

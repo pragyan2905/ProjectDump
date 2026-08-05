@@ -9,7 +9,7 @@ broker_url = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
 celery_app = Celery("email_worker", broker=broker_url, backend=broker_url)
 
 @celery_app.task(name="process_campaign")
-def process_campaign(campaign_id: int):
+def process_campaign(campaign_id: int, groq_api_key: str):
     """
     Background worker task. 
     It reads pending records from the DB, runs the LangGraph AI to generate the email,
@@ -44,6 +44,7 @@ def process_campaign(campaign_id: int):
                     "recipient_company": "Unknown", 
                     "recipient_role": "Unknown",
                     "custom_prompt": campaign.prompt_template,
+                    "groq_api_key": groq_api_key,
                     "generated_draft": "",
                     "quality_approved": False
                 }

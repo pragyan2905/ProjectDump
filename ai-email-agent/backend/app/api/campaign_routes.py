@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models.campaign import Campaign, EmailRecord
-from app.schemas.campaign import CampaignCreate, CampaignResponse, EmailRecordResponse, EmailRecordUpdate
+from app.schemas.campaign import CampaignCreate, CampaignResponse, EmailRecordResponse, EmailRecordUpdate, EmailSendRequest
 from app.worker import process_campaign
 from typing import List
 
@@ -50,7 +50,7 @@ def create_campaign(payload: CampaignCreate, db: Session = Depends(get_db)):
 
     # 3. Trigger the Celery worker to process this in the background!
     # The .delay() method pushes the job to Redis without making the user wait.
-    process_campaign.delay(new_campaign.id)
+    process_campaign.delay(new_campaign.id, payload.groq_api_key)
 
     return {
         "id": new_campaign.id,
@@ -86,7 +86,7 @@ def update_email_record(email_id: int, payload: EmailRecordUpdate, db: Session =
 from app.services.email_sender import SMTPSender
 
 @router.post("/emails/{email_id}/send")
-def send_individual_email(email_id: int, db: Session = Depends(get_db)):
+def send_individual_email(email_id: int, payload: EmailSendRequest, db: Session = Depends(get_db)):
     """Send an approved email draft via SMTP"""
     email_record = db.query(EmailRecord).filter(EmailRecord.id == email_id).first()
     if not email_record:
@@ -96,7 +96,7 @@ def send_individual_email(email_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Only approved emails can be sent")
         
     try:
-        sender = SMTPSender()
+        sender = SMTPSender(smtp_user=payload.smtp_email, smtp_password=payload.smtp_password)
         subject = f"Connecting with {email_record.recipient_name}"
         
         # We need to extract the subject from the generated content if possible.

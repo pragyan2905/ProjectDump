@@ -6,15 +6,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class SMTPSender:
-    def __init__(self):
-        self.server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-        self.port = int(os.getenv("SMTP_PORT", 587))
-        self.username = os.getenv("SMTP_USERNAME")
-        self.password = os.getenv("SMTP_PASSWORD")
+    def __init__(self, smtp_user: str, smtp_password: str):
+        self.server = "smtp.gmail.com"
+        self.port = 587
+        self.username = smtp_user
+        self.password = smtp_password
 
     def send_email(self, to_email: str, subject: str, body_text: str):
         if not self.username or not self.password:
-            raise ValueError("SMTP credentials are not configured in .env file")
+            raise ValueError("SMTP credentials were not provided")
             
         msg = EmailMessage()
         msg.set_content(body_text)

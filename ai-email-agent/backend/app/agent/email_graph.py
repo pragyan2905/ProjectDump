@@ -18,20 +18,20 @@ class EmailState(TypedDict):
     recipient_company: str
     recipient_role: str
     custom_prompt: str
+    groq_api_key: str
     generated_draft: str
     quality_approved: bool
-
-# Initialize Groq LLM (Ensure GROQ_API_KEY is set in your backend/.env)
-# Using GPT-OSS 20B for high-quality text generation
-llm = ChatGroq(
-    temperature=0.7, 
-    model_name="openai/gpt-oss-20b", 
-    api_key=os.getenv("GROQ_API_KEY")
-)
 
 # 2. Node Functions
 def draft_generator_node(state: EmailState):
     """Node: Generates the initial email draft based on recipient info and prompt."""
+    
+    # Initialize Groq LLM using the API key from the state
+    llm = ChatGroq(
+        temperature=0.7, 
+        model_name="openai/gpt-oss-20b", 
+        api_key=state["groq_api_key"]
+    )
     
     prompt_template = PromptTemplate(
         input_variables=["name", "company", "role", "instructions"],
