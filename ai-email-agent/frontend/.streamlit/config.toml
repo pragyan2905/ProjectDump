@@ -1,7 +1,7 @@
 [theme]
-# A modern, soft dark theme (inspired by sleek Tailwind designs)
-primaryColor = "#6366f1"
-backgroundColor = "#0f172a"
-secondaryBackgroundColor = "#1e293b"
-textColor = "#f8fafc"
+# A soothing, smooth pastel theme based on the provided palette
+primaryColor = "#A58A89"
+backgroundColor = "#DCCBC7"
+secondaryBackgroundColor = "#CBB4B0"
+textColor = "#3d3435"
 font = "sans serif"
