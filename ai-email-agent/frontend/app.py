@@ -171,11 +171,11 @@ if "campaign_id" in st.session_state:
                                             }
                                             send_res = requests.post(f"{BACKEND_URL}/api/campaign/emails/{email['id']}/send", json=send_payload)
                                             if send_res.status_code == 200:
-                                            st.balloons()
-                                            st.success("Email sent successfully!")
-                                            st.rerun()
-                                        else:
-                                            st.error(f"Failed to send: {send_res.text}")
+                                                st.balloons()
+                                                st.success("Email sent successfully!")
+                                                st.rerun()
+                                            else:
+                                                st.error(f"Failed to send: {send_res.text}")
                             with col_b:
                                 if st.button("✏️ Edit & Re-save", key=f"btn_save_{email['id']}"):
                                     update_payload = {
