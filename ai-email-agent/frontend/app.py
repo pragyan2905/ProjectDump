@@ -7,11 +7,73 @@ BACKEND_URL = "http://localhost:8000"
 
 st.set_page_config(page_title="AI Email Agent", layout="wide")
 
-st.title("AI Bulk Email Agent")
-st.markdown("Upload your recipient data (CSV or Excel) and provide a custom prompt to generate personalized emails.")
+st.markdown('''
+<style>
+    /* Make inputs pop with very light cream backgrounds and soft borders */
+    .stTextInput input, .stTextArea textarea {
+        background-color: #ffffff !important;
+        border: 1px solid #BAB2B5 !important;
+        border-radius: 8px !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.02) !important;
+        color: #123C69 !important;
+    }
+    
+    /* Make buttons smooth and distinct (Dark Magenta) */
+    .stButton > button {
+        background-color: #AC3B61 !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease;
+    }
+    .stButton > button:hover {
+        background-color: #8A2E4C !important;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+    }
+    
+    /* Style the table for a cleaner look */
+    [data-testid="stDataFrame"] {
+        background-color: #ffffff;
+        border-radius: 8px;
+        padding: 5px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    /* Make alerts softer */
+    .stAlert {
+        border-radius: 8px !important;
+        border: none !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+    }
+    
+    /* Expander styling */
+    .streamlit-expanderHeader {
+        background-color: #ffffff !important;
+        border-radius: 8px !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.02) !important;
+        border: 1px solid #BAB2B5 !important;
+    }
+</style>
+''', unsafe_allow_html=True)
 
+header_col1, header_col2 = st.columns([3, 1])
+with header_col1:
+    st.title("AI Bulk Email Agent")
+    st.markdown("Upload your recipient data (CSV or Excel) and provide a custom prompt to generate personalized emails.")
 
-
+with header_col2:
+    # A simple, creative aesthetic design using overlapping geometric circles with the palette colors
+    st.markdown('''
+        <div style="display:flex; justify-content:flex-end; align-items:center; height:100%; padding-top:20px;">
+            <div style="position:relative; width:120px; height:120px;">
+                <div style="position:absolute; top:10px; right:40px; width:70px; height:70px; border-radius:50%; background-color:#AC3B61; opacity:0.85;"></div>
+                <div style="position:absolute; top:40px; right:10px; width:50px; height:50px; border-radius:50%; background-color:#123C69; opacity:0.9;"></div>
+                <div style="position:absolute; top:60px; right:60px; width:40px; height:40px; border-radius:50%; background-color:#EDC7B7; opacity:0.95;"></div>
+            </div>
+        </div>
+    ''', unsafe_allow_html=True)
 st.divider()
 
 # Sidebar for Configuration

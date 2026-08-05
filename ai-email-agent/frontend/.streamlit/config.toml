@@ -1,7 +1,6 @@
 [theme]
-# A soothing, smooth pastel theme based on the provided palette
-primaryColor = "#A58A89"
-backgroundColor = "#DCCBC7"
-secondaryBackgroundColor = "#CBB4B0"
-textColor = "#3d3435"
+primaryColor = "#AC3B61"
+backgroundColor = "#EEE2DC"
+secondaryBackgroundColor = "#BAB2B5"
+textColor = "#123C69"
 font = "sans serif"
